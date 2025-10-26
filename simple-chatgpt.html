@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Abdullah Hejazi — Web Developer</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f14; --ink:#e6f3ff; --muted:#90a4b8; --accent:#00d4ff;
+    --glow: 0 0 40px rgba(0,212,255,.35), 0 0 80px rgba(0,212,255,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+  a{color:inherit;text-decoration:none}
+  .hero{
+    position:relative; height:100svh; min-height:100vh; overflow:hidden; isolation:isolate;
+    display:grid; place-items:center; padding: clamp(16px,4vw,48px);
+  }
+  @keyframes drift{to{transform: translate3d(2%, -2%, 0) scale(1.03) rotate(2deg)}}
+  @keyframes swirl{to{transform: rotate(360deg)}}
+
+  .frame{
+    width:min(1150px, 96vw);
+    aspect-ratio: 16/8.5;
+    border:1px solid rgba(255,255,255,.08);
+    background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+    border-radius:28px; box-shadow: 0 20px 60px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.04);
+    display:grid; grid-template-columns: 1.15fr .85fr; gap:clamp(16px,3vw,40px);
+    padding: clamp(20px,4vw,48px);
+    position:relative; overflow:hidden;
+  }
+  .scan{
+    position:absolute; inset:0; background:
+      repeating-linear-gradient(180deg, rgba(255,255,255,.035) 0 1px, transparent 1px 3px);
+    mix-blend-mode: overlay; opacity:.18; animation: scan 6s linear infinite;
+  }
+  @keyframes scan{to{transform: translateY(6px)}}
+
+  .badge{
+    display:inline-grid; grid-auto-flow:column; align-items:center; gap:8px;
+    font: 600 12px/1 Inter, sans-serif; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted);
+    background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+    border-radius:999px; padding:8px 12px;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow: var(--glow)}
+
+  .title{
+    margin:14px 0 8px;
+    font: 800 clamp(34px,8vw,68px)/1.02 Inter, system-ui; letter-spacing:.5px;
+    background: linear-gradient(90deg, #b7fff8 0%, #00d4ff 40%, #8a7dff 70%, #b7fff8 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow: 0 0 28px rgba(0,212,255,.25);
+  }
+  .subtitle{font:600 clamp(14px,2.2vw,18px)/1.5 "JetBrains Mono", ui-monospace, SFMono-Regular; color:var(--muted)}
+  .cta{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap}
+  .btn{
+    padding:12px 16px; border-radius:14px; border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.03); backdrop-filter:saturate(120%) blur(6px);
+    font-weight:700; letter-spacing:.3px; transition:.25s transform, .25s box-shadow, .25s background;
+  }
+  .btn:hover{transform: translateY(-2px); box-shadow: var(--glow); background: rgba(255,255,255,.06)}
+  .btn.primary{background: radial-gradient(120% 150% at 10% 10%, rgba(0,212,255,.18), rgba(0,212,255,.10) 40%, rgba(255,255,255,.03) 80%); border-color: rgba(0,212,255,.35)}
+
+  .right{
+    position:relative; display:grid; place-items:center;
+  }
+  .orbit{
+    width:min(70vmin,520px); aspect-ratio:1; border-radius:50%;
+    border:1px dashed rgba(255,255,255,.10);
+    display:grid; place-items:center; position:relative;
+    animation: float 6s ease-in-out infinite alternate;
+  }
+  @keyframes float{to{transform: translateY(-6px)}}
+  .core{
+    width:40%; aspect-ratio:1; border-radius:20px;
+    background:
+      radial-gradient(60% 60% at 50% 35%, rgba(0,212,255,.40), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow: inset 0 0 28px rgba(0,212,255,.18), 0 10px 30px rgba(0,0,0,.6);
+    display:grid; place-items:center; text-align:center; padding:14px;
+    font:700 clamp(13px,1.6vw,16px)/1.4 "JetBrains Mono", monospace; color:#cdefff;
+  }
+  .chip{
+    position:absolute; width:54px;height:54px;border-radius:14px;
+    background: rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12); display:grid; place-items:center;
+    font:700 11px/1.1 "JetBrains Mono", monospace; color:#bfeeff; padding:6px; text-align:center;
+    box-shadow: 0 10px 20px rgba(0,0,0,.35), inset 0 0 24px rgba(255,255,255,.04);
+  }
+  .chip::after{content:""; position:absolute; inset:-2px; border-radius:inherit; box-shadow: var(--glow); opacity:.0; transition:.25s}
+  .chip:hover::after{opacity:.8}
+  /* Positions around orbit */
+  .chip.js{top:-10px; left:50%; transform:translate(-50%,0) rotate(-6deg)}
+  .chip.php{right:-10px; top:20%; transform:rotate(8deg)}
+  .chip.laravel{right:10%; bottom:18%; transform:rotate(-10deg)}
+  .chip.node{left:-10px; top:28%; transform:rotate(-8deg)}
+  .chip.css{left:12%; bottom:10%; transform:rotate(6deg)}
+  .chip.html{top:50%; left:78%; transform:translateY(-50%) rotate(0)}
+  .chip.linux{top:70%; left:50%; transform:translate(-50%,-50%) rotate(4deg)}
+  .chip.flutter{top:50%; left:8%; transform:translateY(-50%) rotate(-2deg)}
+
+  .socials{
+    position:absolute; bottom:16px; right:20px; display:flex; gap:12px; opacity:.85
+  }
+  .socials a{
+    width:40px;height:40px; display:grid; place-items:center; border-radius:12px;
+    background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    transition:.25s transform,.25s box-shadow
+  }
+  .socials a:hover{transform: translateY(-3px); box-shadow: var(--glow)}
+  .sr{position:absolute; inset:0; overflow:hidden; clip:rect(0 0 0 0); width:1px;height:1px; white-space:nowrap}
+</style>
+</head>
+<body>
+  <section class="hero" role="banner" aria-label="Abdullah Hejazi Portfolio — single section">
+    <div class="frame" role="region" aria-labelledby="name">
+      <div>
+        <span class="badge"><span class="dot" aria-hidden="true"></span> Available for Freelance</span>
+        <h1 class="title" id="name">Abdullah Hejazi</h1>
+        <p class="subtitle">Full-Stack Web Developer • Cairo, Egypt • 10+ yrs</p>
+
+        <p style="max-width:56ch; margin:16px 0 0; color:var(--muted)">
+          I design, build, and scale fast, reliable web & mobile apps. Laravel, Node.js, Flutter — wired together with clean design, strong DX, and an eye for performance.
+        </p>
+
+        <div class="cta">
+          <a class="btn primary" href="mailto:hello@hejazi.dev">Contact Me</a>
+          <a class="btn" href="#work" onclick="alert('Single section demo — add anchors as you extend.')">View Work</a>
+        </div>
+      </div>
+
+      <div class="right" aria-hidden="false">
+        <div class="orbit">
+          <div class="core">Creative • Clean • Performant</div>
+          <div class="chip js">JS</div>
+          <div class="chip php">PHP</div>
+          <div class="chip laravel">Laravel</div>
+          <div class="chip node">Node</div>
+          <div class="chip css">CSS</div>
+          <div class="chip html">HTML</div>
+          <div class="chip linux">Linux</div>
+          <div class="chip flutter">Flutter</div>
+        </div>
+      </div>
+
+      <div class="scan" aria-hidden="true"></div>
+
+      <nav class="socials" aria-label="Social links">
+        <a href="https://github.com/" target="_blank" rel="noopener"><span class="sr">GitHub</span>🐙</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener"><span class="sr">LinkedIn</span>in</a>
+        <a href="https://x.com/" target="_blank" rel="noopener"><span class="sr">X</span>𝕏</a>
+      </nav>
+    </div>
+  </section>
+</body>
+</html>
