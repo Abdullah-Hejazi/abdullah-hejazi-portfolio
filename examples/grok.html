@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعة الراية</title>
+    <!-- Google Fonts - Cairo (مناسبة للغة العربية) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Line Awesome Icons (بديل خفيف لـ Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
+    <style>
+        :root {
+            --primary: #ff5722;     /* Deep Orange */
+            --primary-dark: #e64a19;
+            --light-gray: #f5f5f5;
+            --border: #eee;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background:#fff;
+            color:#333;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+        }
+        header {
+            background: var(--primary);
+            color:#fff;
+            padding:1rem;
+            text-align:center;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size:1.8rem;
+            font-weight:700;
+        }
+        .search-bar {
+            padding:1rem;
+            background:#fafafa;
+            border-bottom:1px solid var(--border);
+            position:sticky;
+            top:0;
+            z-index:10;
+        }
+        .search-container {
+            display:flex;
+            align-items:center;
+            background:#fff;
+            border-radius:50px;
+            overflow:hidden;
+            box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        }
+        .search-container input {
+            flex:1;
+            border:none;
+            padding:0.9rem 1.2rem;
+            font-size:1rem;
+            outline:none;
+            text-align:right;
+        }
+        .search-btn, .adv-search-btn {
+            background:var(--primary);
+            color:#fff;
+            border:none;
+            width:45px;
+            height:45px;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1.2rem;
+        }
+        .adv-search-btn {
+            background:transparent;
+            color:#666;
+        }
+        main {
+            flex:1;
+            padding:1rem;
+        }
+        .encyclopedias-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap:1.5rem;
+        }
+        .encyclopedia-card {
+            background:#fff;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 4px 15px rgba(0,0,0,0.08);
+            transition:transform 0.3s, box-shadow 0.3s;
+            cursor:pointer;
+        }
+        .encyclopedia-card:hover {
+            transform:translateY(-8px);
+            box-shadow:0 10px 25px rgba(0,0,0,0.15);
+        }
+        .card-img {
+            width:100%;
+            height:180px;
+            object-fit:cover;
+        }
+        .card-body {
+            padding:1rem;
+        }
+        .card-title {
+            font-size:1.25rem;
+            font-weight:700;
+            margin-bottom:0.5rem;
+            color:#333;
+        }
+        .card-tag {
+            display:inline-block;
+            background:var(--primary);
+            color:#fff;
+            font-size:0.8rem;
+            padding:0.25rem 0.75rem;
+            border-radius:50px;
+            margin-bottom:0.75rem;
+        }
+        .card-laws {
+            color:#777;
+            font-size:0.95rem;
+        }
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position:fixed;
+            bottom:0;
+            left:0;
+            right:0;
+            background:#fff;
+            border-top:1px solid var(--border);
+            display:flex;
+            justify-content:space-around;
+            padding:0.5rem 0;
+            z-index:100;
+        }
+        .nav-item {
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            color:#888;
+            font-size:0.9rem;
+            cursor:pointer;
+            transition:color 0.3s;
+        }
+        .nav-item.active, .nav-item:hover {
+            color:var(--primary);
+        }
+        .nav-item i {
+            font-size:1.5rem;
+            margin-bottom:0.25rem;
+        }
+        .nav-item.active i {
+            color:var(--primary);
+        }
+        /* للشاشات الكبيرة: Sidebar بدلاً من Bottom Nav */
+        @media (min-width: 768px) {
+            body { flex-direction:row; }
+            .bottom-nav { display:none; }
+            .sidebar {
+                width:260px;
+                background:#fff;
+                border-left:1px solid var(--border);
+                padding:2rem 1rem;
+                height:100vh;
+                position:sticky;
+                top:0;
+            }
+            .sidebar-item {
+                display:flex;
+                align-items:center;
+                padding:1rem;
+                border-radius:12px;
+                margin-bottom:0.5rem;
+                color:#555;
+                cursor:pointer;
+                transition:0.3s;
+            }
+            .sidebar-item:hover, .sidebar-item.active {
+                background:var(--primary);
+                color:#fff;
+            }
+            .sidebar-item i {
+                margin-left:1rem;
+                font-size:1.3rem;
+            }
+            main { flex:1; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>موسوعة الراية</h1>
+</header>
+
+<div class="search-bar">
+    <div class="search-container">
+        <button class="adv-search-btn"><i class="la la-sliders-h"></i></button>
+        <input type="text" placeholder="ابحث في الموسوعات...">
+        <button class="search-btn"><i class="la la-search"></i></button>
+    </div>
+</div>
+
+<main>
+    <div class="encyclopedias-grid">
+        <!-- مثال على بطاقة موسوعة -->
+        <div class="encyclopedia-card">
+            <img src="https://via.placeholder.com/400x300/ff5722/ffffff?text=موسوعة+الأحوال+الشخصية" class="card-img" alt="موسوعة الأحوال الشخصية">
+            <div class="card-body">
+                <div class="card-tag">جديدة</div>
+                <div class="card-title">موسوعة الأحوال الشخصية</div>
+                <div class="card-laws">١٤٧ مادة قانونية</div>
+            </div>
+        </div>
+
+        <div class="encyclopedia-card">
+            <img src="https://via.placeholder.com/400x300/2196f3/ffffff?text=موسوعة+القانون+التجاري" class="card-img" alt="موسوعة القانون التجاري">
+            <div class="card-body">
+                <div class="card-title">موسوعة القانون التجاري</div>
+                <div class="card-laws">٢٨٩ مادة قانونية</div>
+            </div>
+        </div>
+
+        <div class="encyclopedia-card">
+            <img src="https://via.placeholder.com/400x300/4caf50/ffffff?text=موسوعة+القانون+الجنائي" class="card-img" alt="موسوعة القانون الجنائي">
+            <div class="card-body">
+                <div class="card-tag">محدثة</div>
+                <div class="card-title">موسوعة القانون الجنائي</div>
+                <div class="card-laws">٤١٢ مادة قانونية</div>
+            </div>
+        </div>
+
+        <div class="encyclopedia-card">
+            <img src="https://via.placeholder.com/400x300/9c27b0/ffffff?text=موسوعة+الضرائب" class="card-img" alt="موسوعة الضرائب">
+            <div class="card-body">
+                <div class="card-title">موسوعة الضرائب والرسوم</div>
+                <div class="card-laws">١٩٨ مادة قانونية</div>
+            </div>
+        </div>
+        <!-- يمكنك إضافة المزيد من البطاقات هنا -->
+    </div>
+</main>
+
+<!-- Bottom Navigation (للجوال) -->
+<nav class="bottom-nav">
+    <div class="nav-item active">
+        <i class="la la-home"></i>
+        <span>الرئيسية</span>
+    </div>
+    <div class="nav-item">
+        <i class="la la-bell"></i>
+        <span>الإشعارات</span>
+    </div>
+    <div class="nav-item">
+        <i class="la la-cog"></i>
+        <span>الخيارات</span>
+    </div>
+    <div class="nav-item">
+        <i class="la la-envelope"></i>
+        <span>تواصل مع الدعم</span>
+    </div>
+    <div class="nav-item">
+        <i class="la la-sign-out-alt"></i>
+        <span>تسجيل الخروج</span>
+    </div>
+</nav>
+
+<!-- Sidebar (للشاشات الكبيرة) -->
+<aside class="sidebar">
+    <div class="sidebar-item active"><i class="la la-home"></i> الرئيسية</div>
+    <div class="sidebar-item"><i class="la la-bell"></i> الإشعارات</div>
+    <div class="sidebar-item"><i class="la la-cog"></i> الخيارات</div>
+    <div class="sidebar-item"><i class="la la-envelope"></i> تواصل مع الدعم</div>
+    <div class="sidebar-item"><i class="la la-sign-out-alt"></i> تسجيل الخروج</div>
+</aside>
+
+</body>
+</html>

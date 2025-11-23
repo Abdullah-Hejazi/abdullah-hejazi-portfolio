@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعة الراية</title>
+    <!-- Import FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Cairo Font for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #FF5722; /* Deep Orange */
+            --primary-light: #FFCCBC;
+            --primary-hover: #E64A19;
+            --bg-color: #F4F6F8;
+            --surface-color: #FFFFFF;
+            --text-color: #333333;
+            --text-secondary: #777777;
+            --shadow-sm: 0 2px 5px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--surface-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            right: 0; /* RTL positioning */
+            top: 0;
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .app-logo i {
+            font-size: 1.8rem;
+        }
+
+        .app-logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            margin-left: 12px; /* Space between icon and text in RTL */
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 87, 34, 0.1);
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+        }
+
+        .logout-section {
+            margin-top: auto;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+
+        .logout-btn {
+            color: #dc3545;
+        }
+        .logout-btn:hover {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            flex: 1;
+            margin-right: var(--sidebar-width); /* Offset for RTL sidebar */
+            padding: 2rem;
+        }
+
+        /* --- Search Bar --- */
+        .header-search {
+            display: flex;
+            align-items: center;
+            background: var(--surface-color);
+            padding: 10px 15px;
+            border-radius: 50px; /* Pill shape */
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+        }
+
+        .header-search input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            padding: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+        }
+
+        .search-icon {
+            color: var(--primary-color);
+            margin-left: 10px;
+        }
+
+        .settings-btn {
+            background: var(--bg-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-btn:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        /* --- Encyclopedia Grid --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- Card Design --- */
+        .card {
+            background: var(--surface-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+        .card-image {
+            height: 160px;
+            background-color: #eee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Optional Tag styling */
+        .tag {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card-body {
+            padding: 1.2rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .law-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .law-count i {
+            color: var(--primary-color);
+        }
+
+        .action-arrow {
+            color: var(--primary-color);
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .action-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(100%); /* Hide sidebar off screen */
+                transition: transform 0.3s ease;
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+
+            /* Simple hamburger for mobile not implemented for brevity, 
+               but layout adapts to full width */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="app-logo">
+            <!-- Icon -->
+            <i class="fa-solid fa-scale-balanced"></i>
+            <h1>موسوعة الراية</h1>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>الرئيسية</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>الإشعارات</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>الخيارات</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-headset"></i>
+                    <span>تواصل مع الدعم</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="logout-section">
+            <a href="#" class="nav-link logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>تسجيل الخروج</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Search Bar -->
+        <div class="header-search">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" placeholder="ابحث عن موسوعة، قانون، أو مادة...">
+            <button class="settings-btn" title="بحث متقدم">
+                <i class="fa-solid fa-filter"></i>
+            </button>
+        </div>
+
+        <h2 style="margin-bottom: 20px; font-weight: 700;">الموسوعات القانونية</h2>
+
+        <!-- Grid of Encyclopedias -->
+        <div class="grid-container">
+
+            <!-- Item 1 -->
+            <div class="card">
+                <div class="card-image">
+                    <!-- Placeholder Image -->
+                    <img src="https://placehold.co/600x400/FFCCBC/FF5722?text=القانون+الجنائي" alt="Cover">
+                    <span class="tag">شائع</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">الموسوعة الجنائية الشاملة</h3>
+                    <div class="card-footer">
+                        <div class="law-count">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>1,250 قانون</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-left action-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://placehold.co/600x400/FFCCBC/FF5722?text=القانون+المدني" alt="Cover">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">موسوعة القانون المدني</h3>
+                    <div class="card-footer">
+                        <div class="law-count">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>3,400 قانون</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-left action-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://placehold.co/600x400/FFCCBC/FF5722?text=أحكام+النقض" alt="Cover">
+                    <span class="tag">جديد</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">موسوعة أحكام النقض</h3>
+                    <div class="card-footer">
+                        <div class="law-count">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>5,000 حكم</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-left action-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://placehold.co/600x400/FFCCBC/FF5722?text=القانون+التجاري" alt="Cover">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">موسوعة القانون التجاري والشركات</h3>
+                    <div class="card-footer">
+                        <div class="law-count">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>850 قانون</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-left action-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://placehold.co/600x400/FFCCBC/FF5722?text=القانون+الدولي" alt="Cover">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">الاتفاقيات والمعاهدات الدولية</h3>
+                    <div class="card-footer">
+                        <div class="law-count">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>420 وثيقة</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-left action-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Item 6 -->
+             <div class="card">
+                <div class="card-image">
+                    <img src="https://placehold.co/600x400/FFCCBC/FF5722?text=الأسرة" alt="Cover">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">قوانين الأسرة والأحوال الشخصية</h3>
+                    <div class="card-footer">
+                        <div class="law-count">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>150 قانون</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-left action-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
